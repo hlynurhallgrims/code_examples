@@ -1,0 +1,72 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+library(xtable)
+
+## Create 6 vectors with data 
+
+horizon <- c("Argentina","2", "10", "20", "Chile", "2", "10", "20", "Mexico", "2", "10", "20","South Africa", "2", "10", "20")
+sp5 <- c("","0.6739", "0.9667", "3.8382", "", "2.4737", "2.8060", "4.2509", "", "5.4719", "6.5884", "7.1833", "", "2.6637", "4.3817", "4.7271")
+m1 <- c("","0.0491", "0.6166", "1.3429", "", "1.7495", "2.0132", "1.9614", "", "2.3491", "2.2784", "2.9876", "", "0.0732", "0.0730", "0.1731")
+m2 <- c("","1.3178", "1.9413", "3.0179", "", "1.6681", "1.6813", "1.6847", "", "3.2947", "4.1652", "4.2864","", "13.5581", "17.0198", "17.0587")
+eq <- c("","6.6076", "6.6975", "6.4701", "", "2.7691", "4.8530", "5.7686", "", "4.0668", "9.0204", "12.8919", "", "0.0415", "0.2357", "0.8326")
+bond <- c("","90.2654", "88.6232", "84.2164", "", "83.3904", "74.1451", "72.1791", "", "77.1693", "69.1581", "63.5943", "", "82.4652", "77.0207", "75.9368")
+equity <- c("","1.0859", "1.1545", "1.1142", "", "7.9488", "14.5011", "14.1550", "", "7.6478", "8.7891", "9.0561","", "1.1979", "1.2688", "1.2716")
+
+## Create dataframe using the vectors above
+
+unit_table <- data.frame(horizon, sp5, m1, m2, eq,bond,equity, stringsAsFactors = FALSE)
+colnames(unit_table) <- c("Periods", "S\\&P 500", "US M1", "Domestic M1","Domestic Equity Index", "Bond Flows", "Equity Flows")
+
+## Create a table using XTable
+
+#Boldify a few specific words in the table 
+
+unit_table[1, "Periods"] <- paste0("BOLD", unit_table[1, "Periods"])
+unit_table[5, "Periods"] <- paste0("BOLD", unit_table[5, "Periods"])
+unit_table[9, "Periods"] <- paste0("BOLD", unit_table[9, "Periods"])
+unit_table[13, "Periods"] <- paste0("BOLD", unit_table[13, "Periods"])
+
+# Xtable Code 
+
+table <- xtable(unit_table, 
+                caption = "Variance Decomposition for Bond Flows - Latin America and South Africa  \\label{Table4}",
+                # tabular.environment = "longtable",
+                floating = TRUE,
+                table.placement = 'H',
+                include.rownames = FALSE,
+                # scalebox = 0.3,
+                comment = FALSE,
+                caption.placement = 'top',
+                align = "|l|c|c|c|c|c|c|c|"
+)
+
+print(table)
+# 
+# # Bold function in xtable for column names and words in table
+# 
+# bold.function <- function(x) gsub('BOLD(.*)', paste('\\\\textbf{\\1','}'),x)
+# bold <- function(x) {paste('{\\textbf{',x,'}}', sep ='')}
+# 
+# # adding a footnote
+# 
+# comment <- list(pos = list(0))
+# comment$pos[[1]] <- c(nrow(unit_table))
+# comment$command <- c(paste("\\hline\n", 
+#                            "This table presents the percentage of variation in bond flows due to variations in each variable in the Stuctural VAR system.\n", 
+#                            sep = ""))
+# 
+# print(table, sanitize.text.function = bold.function, sanitize.colnames.function = bold,floating = TRUE,floating.environment = "sidewaystable", include.rownames = FALSE,add.to.row = comment, hline.after = c(-1, 0), comment = FALSE)
+
+
+```
+
